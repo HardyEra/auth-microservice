@@ -1,7 +1,7 @@
 import express from "express";
 import apiKeyAuth from "../middleware/apiKeyAuth.js";
 import jwtAuth from "../middleware/jwtAuth.js";
-import authorize from "../middleware/authorize.js";
+
 
 const router = express.Router();
 
@@ -19,17 +19,5 @@ router.get(
   }
 );
 
-// Admin-only
-router.get(
-  "/admin/dashboard",
-  apiKeyAuth,
-  jwtAuth,
-  authorize("admin"),
-  (req, res) => {
-    res.status(200).json({
-      message: "Admin dashboard accessed"
-    });
-  }
-);
 
 export default router;

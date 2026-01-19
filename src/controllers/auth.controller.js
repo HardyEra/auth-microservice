@@ -52,8 +52,7 @@ export const login = async (req, res) => {
     }
 
     const payload = {
-      userId: user._id,
-      role: user.role
+      userId: user._id
     };
 
     const accessToken = generateAccessToken(payload);
