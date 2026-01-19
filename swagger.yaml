@@ -1,0 +1,88 @@
+openapi: 3.0.0
+info:
+  title: Authentication-as-a-Service API
+  version: 1.0.0
+  description: API-first authentication microservice using API keys and JWT
+
+servers:
+  - url: http://localhost:5000/api/v1
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /clients:
+    post:
+      summary: Create a client (internal use)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        201:
+          description: Client created
+
+  /auth/register:
+    post:
+      summary: Register a user
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@test.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        201:
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      summary: Login a user
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: JWT access token returned
+
+  /profile:
+    get:
+      summary: Get authenticated user info
+      security:
+        - ApiKeyAuth: []
+        - BearerAuth: []
+      responses:
+        200:
+          description: Authenticated user response
